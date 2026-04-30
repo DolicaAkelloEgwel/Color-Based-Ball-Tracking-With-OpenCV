@@ -41,6 +41,19 @@ time.sleep(2.0)
 # count number of times crown has been worn
 worn_counter = 0
 
+# crown cut off location
+cut_off = 120
+
+def check_crown_worn(pts):
+	if pts[0] is None or pts[0][1] > cut_off:
+		return False
+
+	for i in range(1, len(pts)):
+		if pts[i] is not None and pts[i][1] < cut_off:
+			return False
+
+	return True
+
 # keep looping
 while True:
 	# grab the current frame
@@ -95,6 +108,9 @@ while True:
 
 	# update the points queue
 	pts.appendleft(center)
+
+	if check_crown_worn(pts):
+		worn_counter += 1
 
 	# loop over the set of tracked points
 	for i in range(1, len(pts)):

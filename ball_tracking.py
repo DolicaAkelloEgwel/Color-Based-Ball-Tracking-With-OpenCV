@@ -38,6 +38,9 @@ else:
 # allow the camera or video file to warm up
 time.sleep(2.0)
 
+# count number of times crown has been worn
+worn_counter = 0
+
 # keep looping
 while True:
 	# grab the current frame
@@ -80,6 +83,7 @@ while True:
 		((x, y), radius) = cv2.minEnclosingCircle(c)
 		M = cv2.moments(c)
 		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+		print(center)
 
 		# only proceed if the radius meets a minimum size
 		if radius > 10:
@@ -103,6 +107,8 @@ while True:
 		# draw the connecting lines
 		thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
 		cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
+
+	cv2.putText(frame, f"Total Owners Today: {worn_counter}", (40, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
 
 	# show the frame to our screen
 	cv2.imshow("Frame", frame)

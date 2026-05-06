@@ -13,7 +13,9 @@ import time
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", default="", help="path to the (optional) video file")
-ap.add_argument("-b", "--buffer", type=int, default=64, help="max buffer size")
+
+ap.add_argument("-b", "--buffer", type=int, default=64, help="max buffer size") # <---- INCREASE OR DECREASE
+
 args = vars(ap.parse_args())
 
 # define the lower and upper boundaries of the "green"
@@ -30,7 +32,9 @@ if not args.get("video"):
     vs = cv2.VideoCapture(0)
     vs.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
     vs.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-    cut_off = 100
+
+
+    cut_off = 100 # <----- INCREASE OR DECREASE
 
 # otherwise, grab a reference to the video file
 else:

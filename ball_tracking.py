@@ -14,7 +14,13 @@ import time
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", default="", help="path to the (optional) video file")
 
-ap.add_argument("-b", "--buffer", type=int, default=64, help="max buffer size") # <---- INCREASE OR DECREASE
+ap.add_argument(
+    "-b",
+    "--buffer",
+    type=int,
+    default=64,  # <---- INCREASE OR DECREASE DEFAULT VALUE
+    help="max buffer size",
+)
 
 args = vars(ap.parse_args())
 
@@ -33,8 +39,7 @@ if not args.get("video"):
     vs.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
     vs.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
-
-    cut_off = 100 # <----- INCREASE OR DECREASE
+    cut_off = 100  # <----- INCREASE OR DECREASE
 
 # otherwise, grab a reference to the video file
 else:

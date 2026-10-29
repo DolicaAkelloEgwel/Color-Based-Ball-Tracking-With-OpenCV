@@ -29,6 +29,12 @@ ap.add_argument(
     action=argparse.BooleanOptionalAction,
 )
 
+ap.add_argument(
+    "-dc",
+    "--draw-circle",
+    action=argparse.BooleanOptionalAction,
+)
+
 args = vars(ap.parse_args())
 
 
@@ -101,7 +107,8 @@ while True:
         if radius > MIN_RADIUS:
             # draw the circle and centroid on the frame,
             # then update the list of tracked points
-            cv2.circle(frame, (int(x), int(y)), int(radius), (0, 255, 255), 2)
+            if args["draw_circle"]:
+                cv2.circle(frame, (int(x), int(y)), int(radius), (0, 255, 255), 2)
 
             if args["draw_trace"]:
                 cv2.circle(frame, center, 5, RED, -1)

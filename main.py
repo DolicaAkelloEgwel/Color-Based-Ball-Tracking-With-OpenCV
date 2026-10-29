@@ -1,7 +1,3 @@
-# USAGE
-# python ball_tracking.py --video ball_tracking_example.mp4
-# python ball_tracking.py
-
 # import the necessary packages
 from collections import deque
 import numpy as np
@@ -39,8 +35,6 @@ if not args.get("video"):
     vs.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
     vs.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
-    cut_off = 100  # <----- INCREASE OR DECREASE
-
 # otherwise, grab a reference to the video file
 else:
     vs = cv2.VideoCapture(args["video"])
@@ -48,21 +42,7 @@ else:
 # allow the camera or video file to warm up
 time.sleep(2.0)
 
-# count number of times crown has been worn
-worn_counter = 0
-
 win_name = "Frame"
-
-
-def check_crown_worn(pts):
-    if pts[0] is None or pts[0][1] > cut_off:
-        return False
-
-    for i in range(1, len(pts)):
-        if pts[i] is not None and pts[i][1] < cut_off:
-            return False
-
-    return True
 
 
 # keep looping
@@ -118,9 +98,6 @@ while True:
     # update the points queue
     pts.appendleft(center)
 
-    if check_crown_worn(pts):
-        worn_counter += 1
-
     # loop over the set of tracked points
     for i in range(1, len(pts)):
         # if either of the tracked points are None, ignore
@@ -133,16 +110,6 @@ while True:
         thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
         cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
 
-    cv2.putText(
-        frame,
-        f"Total Owners Today: {worn_counter}",
-        (40, 40),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        1,
-        (255, 0, 0),
-        2,
-    )
-
     # show the frame to our screen
     cv2.namedWindow(win_name, cv2.WINDOW_NORMAL)
     cv2.setWindowProperty(win_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
@@ -152,10 +119,6 @@ while True:
     # if the 'q' key is pressed, stop the loop
     if key == ord("q"):
         break
-
-# if we are not using a video file, stop the camera video stream
-if not args.get("video", False):
-    vs.stop()
 
 # otherwise, release the camera
 else:

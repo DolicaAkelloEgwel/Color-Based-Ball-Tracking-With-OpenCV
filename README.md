@@ -21,13 +21,15 @@ great tutorials. This project is inspired from his blog: [Ball Tracking with Ope
 8. The script is suitable for real time tracking as it has a very good frame rate (>32 FPS).
 9. The ball can be partially occluded and our script will still successfully track the ball.
 
- ## **Requirements: (with versions i tested on)**
- 1. python          (3.7.3)
- 2. opencv          (4.1.0)
- 3. numpy           (1.61.4)
- 4. imutils         (0.5.2)
+## Install
 
- ## **Commands to run the detection:**
+Run the following command:
+```
+uv sync
+```
+
+## **Commands to run the detection:**
+
  For detecting green ball in a recorded video
  ```
  python ball_tracking.py --video ball_tracking_example.mp4

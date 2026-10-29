@@ -18,7 +18,7 @@ ap.add_argument(
     "--trace-length",
     type=int,
     default=64,
-    help="max buffer size",
+    help="max trace size",
 )
 
 ap.add_argument(
@@ -101,11 +101,12 @@ while True:
             # draw the circle and centroid on the frame,
             # then update the list of tracked points
             cv2.circle(frame, (int(x), int(y)), int(radius), (0, 255, 255), 2)
+
             if args["draw_trace"]:
                 cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
-    # update the points queue
-    pts.appendleft(center)
+            # update the points queue
+            pts.appendleft(center)
 
     # loop over the set of tracked points
     if args["draw_trace"]:

@@ -8,3 +8,9 @@ dependencies = [
     "numpy>=2.4.4",
     "opencv-python>=4.13.0.92",
 ]
+
+[dependency-groups]
+dev = [
+    "black>=26.10.1",
+    "isort>=9.0.2",
+]

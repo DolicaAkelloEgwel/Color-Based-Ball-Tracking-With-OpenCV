@@ -1,20 +1,23 @@
 # import the necessary packages
-from collections import deque
-import numpy as np
 import argparse
+import time
+from collections import deque
+
 import cv2
 import imutils
-import time
+import numpy as np
+
+WIN_NAME = "Frame"
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", default="", help="path to the (optional) video file")
 
 ap.add_argument(
-    "-b",
-    "--buffer",
+    "-tl",
+    "--trace_length",
     type=int,
-    default=64,  # <---- INCREASE OR DECREASE DEFAULT VALUE
+    default=64,
     help="max buffer size",
 )
 
@@ -25,7 +28,7 @@ args = vars(ap.parse_args())
 # list of tracked points
 yellowLower = (20, 100, 100)
 yellowUpper = (30, 255, 255)
-pts = deque(maxlen=args["buffer"])
+pts = deque(maxlen=args["trace_length"])
 
 # if a video path was not supplied, grab the reference
 # to the webcam
@@ -41,8 +44,6 @@ else:
 
 # allow the camera or video file to warm up
 time.sleep(2.0)
-
-win_name = "Frame"
 
 
 # keep looping
@@ -107,21 +108,22 @@ while True:
 
         # otherwise, compute the thickness of the line and
         # draw the connecting lines
-        thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
+        thickness = int(np.sqrt(args["trace_length"] / float(i + 1)) * 2.5)
         cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
 
     # show the frame to our screen
-    cv2.namedWindow(win_name, cv2.WINDOW_NORMAL)
-    cv2.setWindowProperty(win_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
-    cv2.imshow("Frame", frame)
+    cv2.namedWindow(WIN_NAME, cv2.WINDOW_NORMAL)
+    cv2.setWindowProperty(WIN_NAME, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+    cv2.imshow(WIN_NAME, frame)
     key = cv2.waitKey(1) & 0xFF
 
     # if the 'q' key is pressed, stop the loop
     if key == ord("q"):
         break
 
-# otherwise, release the camera
-else:
+
+# release the video
+if args.get("video"):
     vs.release()
 
 # close all windows

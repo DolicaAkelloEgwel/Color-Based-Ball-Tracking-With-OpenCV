@@ -8,6 +8,8 @@ import imutils
 import numpy as np
 
 WIN_NAME = "Frame"
+MIN_RADIUS = 10
+RED = (0, 0, 255)
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -29,7 +31,6 @@ ap.add_argument(
 
 args = vars(ap.parse_args())
 
-print(args)
 
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
@@ -97,13 +98,13 @@ while True:
         center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
         # only proceed if the radius meets a minimum size
-        if radius > 10:
+        if radius > MIN_RADIUS:
             # draw the circle and centroid on the frame,
             # then update the list of tracked points
             cv2.circle(frame, (int(x), int(y)), int(radius), (0, 255, 255), 2)
 
             if args["draw_trace"]:
-                cv2.circle(frame, center, 5, (0, 0, 255), -1)
+                cv2.circle(frame, center, 5, RED, -1)
 
             # update the points queue
             pts.appendleft(center)
@@ -119,7 +120,7 @@ while True:
             # otherwise, compute the thickness of the line and
             # draw the connecting lines
             thickness = int(np.sqrt(args["trace_length"] / float(i + 1)) * 2.5)
-            cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
+            cv2.line(frame, pts[i - 1], pts[i], RED, thickness)
 
     # show the frame to our screen
     cv2.namedWindow(WIN_NAME, cv2.WINDOW_NORMAL)

@@ -8,7 +8,7 @@ points = []
 vs = cv2.VideoCapture(0)
 
 
-def pick_colour(event, x, y, flags, params):
+def get_point(event, x, y, flags, params):
     global points
     if event == cv2.EVENT_LBUTTONDOWN:
         print("Clicked")
@@ -23,7 +23,7 @@ while True:
         break
 
     cv2.namedWindow(WIN_NAME)
-    cv2.setMouseCallback(WIN_NAME, pick_colour)
+    cv2.setMouseCallback(WIN_NAME, get_point)
     cv2.imshow(WIN_NAME, frame)
 
     key = cv2.waitKey(1) & 0xFF

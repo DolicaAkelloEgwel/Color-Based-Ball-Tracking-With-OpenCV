@@ -49,7 +49,7 @@ while True:
         }
 
         with open("config.yaml", "w") as f:
-            yaml.dump(hsv_range, f, default_flow_style=False)
+            yaml.dump(hsv_range, f)
 
         points.clear()
 

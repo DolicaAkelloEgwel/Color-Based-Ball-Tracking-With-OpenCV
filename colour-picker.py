@@ -3,7 +3,6 @@ import numpy as np
 
 WIN_NAME = "image"
 
-no_colour_selected = True
 points = []
 
 vs = cv2.VideoCapture(0)
@@ -16,7 +15,7 @@ def pick_colour(event, x, y, flags, params):
         points.append((x, y))
 
 
-while no_colour_selected:
+while True:
 
     rval, frame = vs.read()
 
@@ -28,8 +27,6 @@ while no_colour_selected:
     cv2.imshow(WIN_NAME, frame)
 
     key = cv2.waitKey(1) & 0xFF
-
-    # if the 'q' key is pressed, stop the loop
     if key == ord("q"):
         break
 

@@ -1,7 +1,6 @@
 import cv2
 
 WIN_NAME = "image"
-cv2.namedWindow(WIN_NAME)
 
 no_colour_selected = True
 

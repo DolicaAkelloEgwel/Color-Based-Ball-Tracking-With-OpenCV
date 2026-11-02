@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import yaml
 
 WIN_NAME = "image"
 
@@ -36,11 +37,19 @@ while True:
         image_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         pixel = image_hsv[y, x]
 
-        upper = np.array([pixel[0] + 10, pixel[1] + 10, pixel[2] + 40])
-        lower = np.array([pixel[0] - 10, pixel[1] - 10, pixel[2] - 40])
+        upper = [pixel[0] + 10, pixel[1] + 10, pixel[2] + 40]
+        lower = [pixel[0] - 10, pixel[1] - 10, pixel[2] - 40]
 
-        image_mask = cv2.inRange(image_hsv, lower, upper)
+        image_mask = cv2.inRange(image_hsv, np.array(lower), np.array(upper))
         cv2.imshow("mask", image_mask)
+
+        hsv_range = {
+            "upper": [int(val) for val in upper],
+            "lower": [int(val) for val in lower],
+        }
+
+        with open("config.yaml", "w") as f:
+            yaml.dump(hsv_range, f, default_flow_style=False)
 
         points.clear()
 

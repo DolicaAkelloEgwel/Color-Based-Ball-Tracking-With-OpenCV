@@ -1,15 +1,19 @@
 import cv2
+import numpy as np
 
 WIN_NAME = "image"
 
 no_colour_selected = True
+points = []
 
 vs = cv2.VideoCapture(0)
 
 
 def pick_colour(event, x, y, flags, params):
+    global points
     if event == cv2.EVENT_LBUTTONDOWN:
-        print("Clicked", x, y)
+        print("Clicked")
+        points.append((x, y))
 
 
 while no_colour_selected:
@@ -28,5 +32,19 @@ while no_colour_selected:
     # if the 'q' key is pressed, stop the loop
     if key == ord("q"):
         break
+
+    if points:
+
+        x, y = points[-1]
+        image_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        pixel = image_hsv[y, x]
+
+        upper = np.array([pixel[0] + 10, pixel[1] + 10, pixel[2] + 40])
+        lower = np.array([pixel[0] - 10, pixel[1] - 10, pixel[2] - 40])
+
+        image_mask = cv2.inRange(image_hsv, lower, upper)
+        cv2.imshow("mask", image_mask)
+
+        points.clear()
 
 cv2.destroyAllWindows()

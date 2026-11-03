@@ -9,18 +9,41 @@ import imutils
 import numpy as np
 import yaml
 
-from colours import ColourRange
+from colour_range import (
+    ColourRange,
+    RED,
+    BLUE,
+    YELLOW,
+    GREEN,
+    ORANGE,
+    BLACK,
+    WHITE,
+    PURPLE,
+)
 
 CONFIG_FILE = "config.yaml"
 
 WIN_NAME = "Frame"
 MIN_RADIUS = 10
-RED = (0, 0, 255)
-YELLOW = (0, 255, 255)
+
+COLOUR_MAP = {
+    "red": RED,
+    "blue": BLUE,
+    "yellow": YELLOW,
+    "green": GREEN,
+    "orange": ORANGE,
+    "white": WHITE,
+    "black": BLACK,
+    "purple": PURPLE,
+}
+
+TRACE_COLOUR = (0, 0, 255)
+CIRCLE_COLOUR = (0, 255, 255)
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-v", "--video", default="", help="path to the (optional) video file")
+
+ap.add_argument("-v", "--video", default="", help="Path to the (optional) video file.")
 
 ap.add_argument(
     "-tl",
@@ -42,14 +65,24 @@ ap.add_argument(
     action=argparse.BooleanOptionalAction,
 )
 
+ap.add_argument(
+    "-c",
+    "--colour",
+    default="",
+    choices=COLOUR_MAP.keys(),
+    help="The colour to track from the predefined options.",
+)
+
 args = vars(ap.parse_args())
 
-if path.exists(CONFIG_FILE):
+if args.get("colour"):
+    colour = COLOUR_MAP[args.get("colour")]
+elif path.exists(CONFIG_FILE):
     with open(CONFIG_FILE, "r") as f:
         colour = yaml.safe_load(f)
-        colour = ColourRange(tuple(colour["lower"]), tuple(colour["upper"]))
+    colour = ColourRange(tuple(colour["lower"]), tuple(colour["upper"]))
 else:
-    pass  # todo
+    print("Unable to run. No config file and no predefined colour chosen.")
 
 # list of tracked points
 pts = deque(maxlen=args["trace_length"])
@@ -117,10 +150,10 @@ while True:
             # draw the circle and centroid on the frame,
             # then update the list of tracked points
             if not args["hide_circle"]:
-                cv2.circle(frame, (int(x), int(y)), int(radius), YELLOW, 2)
+                cv2.circle(frame, (int(x), int(y)), int(radius), CIRCLE_COLOUR, 2)
 
             if not args["hide_trace"]:
-                cv2.circle(frame, center, 5, RED, -1)
+                cv2.circle(frame, center, 5, TRACE_COLOUR, -1)
 
             # update the points queue
             pts.appendleft(center)
@@ -136,7 +169,7 @@ while True:
             # otherwise, compute the thickness of the line and
             # draw the connecting lines
             thickness = int(np.sqrt(args["trace_length"] / float(i + 1)) * 2.5)
-            cv2.line(frame, pts[i - 1], pts[i], RED, thickness)
+            cv2.line(frame, pts[i - 1], pts[i], TRACE_COLOUR, thickness)
 
     # show the frame to our screen
     cv2.namedWindow(WIN_NAME, cv2.WINDOW_NORMAL)

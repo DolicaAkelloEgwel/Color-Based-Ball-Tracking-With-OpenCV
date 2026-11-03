@@ -10,6 +10,7 @@ import numpy as np
 WIN_NAME = "Frame"
 MIN_RADIUS = 10
 RED = (0, 0, 255)
+YELLOW = (0, 255, 255)
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -24,14 +25,14 @@ ap.add_argument(
 )
 
 ap.add_argument(
-    "-dt",
-    "--draw-trace",
+    "-ht",
+    "--hide-trace",
     action=argparse.BooleanOptionalAction,
 )
 
 ap.add_argument(
-    "-dc",
-    "--draw-circle",
+    "-hc",
+    "--hide-circle",
     action=argparse.BooleanOptionalAction,
 )
 
@@ -107,17 +108,17 @@ while True:
         if radius > MIN_RADIUS:
             # draw the circle and centroid on the frame,
             # then update the list of tracked points
-            if args["draw_circle"]:
-                cv2.circle(frame, (int(x), int(y)), int(radius), (0, 255, 255), 2)
+            if not args["hide_circle"]:
+                cv2.circle(frame, (int(x), int(y)), int(radius), YELLOW, 2)
 
-            if args["draw_trace"]:
+            if not args["hide_trace"]:
                 cv2.circle(frame, center, 5, RED, -1)
 
             # update the points queue
             pts.appendleft(center)
 
     # loop over the set of tracked points
-    if args["draw_trace"]:
+    if not args["hide_trace"]:
         for i in range(1, len(pts)):
             # if either of the tracked points are None, ignore
             # them

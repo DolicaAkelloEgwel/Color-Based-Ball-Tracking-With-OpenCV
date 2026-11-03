@@ -44,7 +44,7 @@ ap.add_argument(
 
 args = vars(ap.parse_args())
 
-if os.path.exists(CONFIG_FILE):
+if path.exists(CONFIG_FILE):
     with open(CONFIG_FILE, "r") as f:
         colour = yaml.safe_load(f)
         colour = ColourRange(tuple(colour["lower"]), tuple(colour["upper"]))

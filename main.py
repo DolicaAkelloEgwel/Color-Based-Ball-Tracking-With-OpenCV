@@ -83,6 +83,7 @@ elif path.exists(CONFIG_FILE):
     colour = ColourRange(tuple(colour["lower"]), tuple(colour["upper"]))
 else:
     print("Unable to run. No config file and no predefined colour chosen.")
+    exit()
 
 # list of tracked points
 pts = deque(maxlen=args["trace_length"])

@@ -15,7 +15,7 @@ class ColourRange:
 
 BLUE = ColourRange((100, 150, 0), (140, 255, 255))
 YELLOW = ColourRange((20, 100, 100), (30, 255, 255))
-RED = ColourRange((-10, 100, 100), (10, 255, 255))
+RED = ColourRange((168, 131, 200), (188, 151, 24))
 BLACK = ColourRange((0, 0, 0), (180, 255, 30))
 WHITE = ColourRange((0, 0, 200), (180, 255, 255))
 GREEN = ColourRange((89, 255, 255), (36, 50, 70))

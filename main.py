@@ -2,11 +2,14 @@
 import argparse
 import time
 from collections import deque
+from os import path
 
 import cv2
 import imutils
 import numpy as np
 import yaml
+
+CONFIG_FILE = "config.yaml"
 
 WIN_NAME = "Frame"
 MIN_RADIUS = 10
@@ -39,11 +42,13 @@ ap.add_argument(
 
 args = vars(ap.parse_args())
 
-with open("config.yaml", "r") as f:
-    colour = yaml.safe_load(f)
-    colour["upper"] = tuple(colour["upper"])
-    colour["lower"] = tuple(colour["lower"])
-
+if os.path.exists(CONFIG_FILE):
+    with open(CONFIG_FILE, "r") as f:
+        colour = yaml.safe_load(f)
+        colour["upper"] = tuple(colour["upper"])
+        colour["lower"] = tuple(colour["lower"])
+else:
+    pass  # todo
 
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the

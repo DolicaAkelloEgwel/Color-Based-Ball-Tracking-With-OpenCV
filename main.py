@@ -6,6 +6,7 @@ from collections import deque
 import cv2
 import imutils
 import numpy as np
+import yaml
 
 WIN_NAME = "Frame"
 MIN_RADIUS = 10
@@ -38,12 +39,17 @@ ap.add_argument(
 
 args = vars(ap.parse_args())
 
+with open("config.yaml", "r") as f:
+    colour = yaml.safe_load(f)
+    colour["upper"] = tuple(colour["upper"])
+    colour["lower"] = tuple(colour["lower"])
+
 
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
 # list of tracked points
-yellowLower = (20, 100, 100)
-yellowUpper = (30, 255, 255)
+# yellowLower = (20, 100, 100)
+# yellowUpper = (30, 255, 255)
 pts = deque(maxlen=args["trace_length"])
 
 # if a video path was not supplied, grab the reference
@@ -84,7 +90,7 @@ while True:
     # construct a mask for the color "green", then perform
     # a series of dilations and erosions to remove any small
     # blobs left in the mask
-    mask = cv2.inRange(hsv, yellowLower, yellowUpper)
+    mask = cv2.inRange(hsv, colour["lower"], colour["upper"])
     mask = cv2.erode(mask, None, iterations=2)
     mask = cv2.dilate(mask, None, iterations=2)
 
